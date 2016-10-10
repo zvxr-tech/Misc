@@ -48,7 +48,7 @@
 \renewcommand{\@subject}{#2}%
 }
 
-\newcommand{\ucid}[1]{\renewcommand{\@ucid}{{#1}}}
+\newcommand{\ucid}[1]{\renewcommand{\@ucid}{{(#1)}}}
 
 \newcommand{\semester}[1]{\renewcommand{\@semester}{{#1}}}
 \newcommand{\student}[1]{\renewcommand{\@student}{{#1}}}
@@ -125,7 +125,7 @@
 
 \AtBeginDocument{%
 \begin{flushright}
-\sf{\@student} \emph{(\@ucid)} \\
+\sf{\@student} \emph{\@ucid} \\
 \emph{\@courselabel: \@coursetitle} \\
 
 \emph{\@school} \\
