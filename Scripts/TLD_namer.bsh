@@ -1,0 +1,46 @@
+#!/bin/bash
+# TLD Domain Name Incorporation Generator -- i.e. mecca => mec.ca
+# Mike Clark - 2015
+# Alternate: sed -nE '/textarea/,/\/textarea/p'sed -nE '/ll/,/ow/p'
+#URL="http://jecas.cz/tld-list/?type=plain"
+
+URL='http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
+MIN_PREFIX=1
+MAX_PREFIX=0
+
+
+#Args check
+if [ -z "$1" -o ${#1} -lt 1 ];then 
+	exit 1 #err
+fi
+
+#Const check
+name=$(echo $1 | tr '[:upper:]' '[:lower:]')
+if [ $MAX_PREFIX -lt 1 -o $MAX_PREFIX -gt ${#name} ]; then
+	cursor=${#name} # get lenght of name
+else
+	cursor=$MAX_PREFIX
+fi
+
+
+# Read in the TLD 
+TLD=()
+for line in $(curl $URL 2> /dev/null | tr '[:upper:]' '[:lower:]' | tail -n +2);do
+	if [ "${line:0:1}" == "#" ];then continue; fi
+	TLD+=("$line") # append the tld to the TLD array
+done 
+
+
+# Starting with the maximum size prefix of the name string, test with 
+# each TLD and then strip off one character from the end and continue.
+while [ $cursor -ge $MIN_PREFIX ];do
+	prefix=${name:0:$cursor}
+	for tld in "${TLD[@]}";do
+		#echo "Testing ${prefix}${tld} for $name"
+		if [ "${prefix}${tld}" == "$name" ];then
+			echo ${prefix}.${tld}
+		fi
+	done
+	((cursor--))
+done;
+exit 0 #succ
