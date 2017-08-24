@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# Grade Template Generator (gTg)
+# Mike Clark <clark.in.canada@gmail.com> (2016)
+#
+# Interleave the contents of a file (specified in arg 1)
+# between the lines of a file read from STDIN. 
+# Output on STDOUT
+#
+# $1 = Rubric file
+# stdin = class list
+# stdout = product
+# Usage example
+#
+# ./program a3_rubric.txt < class_list.txt > A3_grades.txt
+
+
+while read LINE;do
+  echo $LINE; cat "$1";
+  echo "============================="; done
